@@ -72,6 +72,8 @@ Your objective is to get all the tests to pass by following the rest of the inst
 - 100% API Coverage from 1 path is achieved
 - Code changes are committed to your Github repo.
 
+[x] Complete
+
 ### 5. Part 2 - Added property 'cost' to the ProductDetails schema
 - Update the products_api.yaml OpenAPI specification such that 'cost' is added as a new property to ProductDetails
 - This will increase the test count to 197 and cause a few tests to fail
