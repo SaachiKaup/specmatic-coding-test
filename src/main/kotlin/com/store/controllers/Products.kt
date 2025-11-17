@@ -10,17 +10,30 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.Max
 
 // Models
 enum class ProductType { book, food, gadget, other }
 
 data class ProductDetails(
+    @field:NotBlank(message = "Name is required and cannot be blank")
     val name: String,
+
+    @field:NotNull(message = "Type is required")
     val type: ProductType,
+
+    @field:NotNull(message = "Inventory is required")
+    @field:Min(value = 1, message = "Inventory must be at least 1")
+    @field:Max(value = 9999, message = "Inventory must be at most 9999")
     val inventory: Int
 )
 
@@ -50,19 +63,6 @@ fun badRequestResponse(path: String, message: String = "Bad Request"): ResponseE
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error)
 }
 
-// Exception Handler for invalid JSON/enum values
-@ControllerAdvice
-class GlobalExceptionHandler {
-
-    @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun handleInvalidJson(
-        ex: HttpMessageNotReadableException,
-        request: HttpServletRequest
-    ): ResponseEntity<ErrorResponseBody> {
-        return badRequestResponse(request.requestURI)
-    }
-}
-
 // Controller
 @RestController
 class Products {
@@ -71,27 +71,61 @@ class Products {
 
     @PostMapping("/products")
     fun createProduct(
-        @RequestBody productDetails: ProductDetails,
+        @Valid @RequestBody productDetails: ProductDetails,
         request: HttpServletRequest
     ): ResponseEntity<*> {
+        // Log incoming request for debugging
+        println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, inventory=${productDetails.inventory}")
+
         // Manual validation for blank name
         if (productDetails.name.isBlank()) {
+            println("DEBUG: Rejecting - name is blank")
             return badRequestResponse(request.requestURI)
         }
 
         // Manual validation for inventory bounds
         if (productDetails.inventory < 1 || productDetails.inventory > 9999) {
+            println("DEBUG: Rejecting - inventory out of bounds: ${productDetails.inventory}")
             return badRequestResponse(request.requestURI)
         }
 
         val id = nextId++
         val product = Product(id, productDetails)
         products.add(product)
+        println("DEBUG: Created product with id=$id")
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductId(id))
     }
 
     @GetMapping("/products")
-    fun getProducts(@RequestParam type: ProductType): List<Product> {
-        return products.filter { it.details.type == type }
+    fun getProducts(@RequestParam(required = false) type: ProductType?): List<Product> {
+        return if (type != null) {
+            products.filter { it.details.type == type }
+        } else {
+            products
+        }
+    }
+}
+
+// Global exception handler
+@ControllerAdvice
+class GlobalExceptionHandler {
+
+    @ExceptionHandler(HttpMessageNotReadableException :: class)
+    fun handleInvalidJson(
+        ex: HttpMessageNotReadableException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponseBody> {
+        println("DEBUG: Caught HttpMessageNotReadableException: ${ex.message}")
+        return badRequestResponse(request.requestURI, "Bad Request")
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationException(
+        ex: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponseBody> {
+        val errors = ex.bindingResult.fieldErrors.joinToString(", ") { "${it.field}: ${it.defaultMessage}" }
+        println("DEBUG: Validation failed: $errors")
+        return badRequestResponse(request.requestURI, "Bad Request")
     }
 }
