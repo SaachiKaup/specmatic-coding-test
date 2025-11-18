@@ -61,12 +61,12 @@ data class ErrorResponseBody(
 )
 
 // Helper function
-fun badRequestResponse(path: String, message: String = "Bad Request"): ResponseEntity<ErrorResponseBody> {
+fun badRequestResponse(message: String = "Bad Request"): ResponseEntity<ErrorResponseBody> {
     val error = ErrorResponseBody(
         timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
         status = 400,
         error = message,
-        path = path
+        path = "/products"
     )
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error)
 }
@@ -107,7 +107,7 @@ class GlobalExceptionHandler {
         request: HttpServletRequest
     ): ResponseEntity<ErrorResponseBody> {
         println("DEBUG: Caught HttpMessageNotReadableException: ${ex.message}")
-        return badRequestResponse(request.requestURI, "Bad Request")
+        return badRequestResponse("Bad Request - Invalid JSON")
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -117,6 +117,6 @@ class GlobalExceptionHandler {
     ): ResponseEntity<ErrorResponseBody> {
         val errors = ex.bindingResult.fieldErrors.joinToString(", ") { "${it.field}: ${it.defaultMessage}" }
         println("DEBUG: Validation failed: $errors")
-        return badRequestResponse(request.requestURI, "Bad Request")
+        return badRequestResponse("Bad Request - Arguments Invalid")
     }
 }
