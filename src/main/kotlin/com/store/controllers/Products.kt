@@ -82,15 +82,11 @@ class Products {
         @Valid @RequestBody productDetails: ProductDetails,
         request: HttpServletRequest
     ): ResponseEntity<*> {
-        // Log incoming request for debugging
-        println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, inventory=${productDetails.inventory}")
-
-        println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, inventory=${productDetails.inventory}, cost=${productDetails.cost}")
 
         val id = nextId++
         val product = Product(id, productDetails)
         products.add(product)
-        println("DEBUG: Created product with id=$id")
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductId(id))
     }
 
