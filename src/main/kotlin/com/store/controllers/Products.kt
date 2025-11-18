@@ -20,6 +20,8 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.DecimalMin
+import jakarta.validation.constraints.DecimalMax
 
 // Models
 enum class ProductType { book, food, gadget, other }
@@ -35,6 +37,12 @@ data class ProductDetails(
     @field:Min(value = 1, message = "Inventory must be at least 1")
     @field:Max(value = 9999, message = "Inventory must be at most 9999")
     val inventory: Int
+
+    @field:NotNull(message = "Cost is required")
+    @field:DecimalMin(value = "0.01", message = "Cost must be at least 0.01")
+    @field:DecimalMax(value = "999999.99", message = "Cost must be at most 999999.99")
+    val cost: Double 
+
 )
 
 data class ProductId(val id: Int)
