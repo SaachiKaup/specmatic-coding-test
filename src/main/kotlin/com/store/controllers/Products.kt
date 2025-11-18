@@ -27,6 +27,11 @@ import jakarta.validation.constraints.DecimalMax
 // Models
 enum class ProductType { book, food, gadget, other }
 
+const val MIN_INVENTORY = 1L
+const val MAX_INVENTORY = 9999L
+const val MIN_COST = "0.0"
+const val MAX_COST = "1000000.0"
+
 data class ProductDetails(
     @field:NotBlank(message = "Name is required and cannot be blank")
     val name: String,
@@ -35,13 +40,13 @@ data class ProductDetails(
     val type: ProductType,
 
     @field:NotNull(message = "Inventory is required")
-    @field:Min(value = 1, message = "Inventory must be at least 1")
-    @field:Max(value = 9999, message = "Inventory must be at most 9999")
+    @field:Min(value = MIN_INVENTORY, message = "Inventory must be at least 1")
+    @field:Max(value = MAX_INVENTORY, message = "Inventory must be at most 9999")
     val inventory: Int,
 
     @field:NotNull(message = "Cost is required")
-    @field:DecimalMin(value = "0.01", message = "Cost must be at least 0.01")
-    @field:DecimalMax(value = "999999.99", message = "Cost must be at most 999999.99")
+    @field:DecimalMin(value = MIN_COST, message = "Cost must be at least 0.01")
+    @field:DecimalMax(value = MAX_COST, message = "Cost must be at most 999999.99")
     val cost: BigDecimal 
 )
 
