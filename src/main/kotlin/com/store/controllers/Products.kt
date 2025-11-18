@@ -41,7 +41,7 @@ data class ProductDetails(
     @field:NotNull(message = "Cost is required")
     @field:DecimalMin(value = "0.01", message = "Cost must be at least 0.01")
     @field:DecimalMax(value = "999999.99", message = "Cost must be at most 999999.99")
-    val cost: Double 
+    val cost: Float 
 
 )
 
