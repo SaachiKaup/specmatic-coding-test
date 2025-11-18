@@ -84,9 +84,8 @@ class Products {
     ): ResponseEntity<*> {
 
         val id = nextId++
-        val product = Product(id, productDetails)
-        products.add(product)
-        
+        products.add(Product(id, productDetails))
+
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductId(id))
     }
 
