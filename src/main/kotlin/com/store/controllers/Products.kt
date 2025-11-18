@@ -42,7 +42,6 @@ data class ProductDetails(
     @field:DecimalMin(value = "0.01", message = "Cost must be at least 0.01")
     @field:DecimalMax(value = "999999.99", message = "Cost must be at most 999999.99")
     val cost: Float 
-
 )
 
 data class ProductId(val id: Int)
@@ -97,8 +96,7 @@ class Products {
             return badRequestResponse(request.requestURI)
         }
 
-        println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, 
-  inventory=${productDetails.inventory}, cost=${productDetails.cost}")
+        println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, inventory=${productDetails.inventory}, cost=${productDetails.cost}")
 
         val id = nextId++
         val product = Product(id, productDetails)
