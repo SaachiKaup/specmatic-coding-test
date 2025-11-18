@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import com.fasterxml.jackson.annotation.JsonUnwrapped
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.annotation.Nulls
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.math.BigDecimal
@@ -44,10 +47,11 @@ data class ProductDetails(
     @field:Max(value = MAX_INVENTORY, message = "Inventory must be at most 9999")
     val inventory: Int,
 
-    @field:NotNull(message = "Cost is required")
     @field:DecimalMin(value = MIN_COST, message = "Cost must be at least 0.01")
     @field:DecimalMax(value = MAX_COST, message = "Cost must be at most 999999.99")
-    val cost: BigDecimal 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSetter(nulls = Nulls.FAIL)
+    val cost: BigDecimal? = null 
 )
 
 data class ProductId(val id: Int)
