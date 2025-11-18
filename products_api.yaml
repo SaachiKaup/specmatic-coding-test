@@ -87,7 +87,7 @@ components:
           maximum: 9999
         cost:
           type: number
-          format: float
+          format: double 
           minimum: 0.01
           maximum: 999999.99
       required:
