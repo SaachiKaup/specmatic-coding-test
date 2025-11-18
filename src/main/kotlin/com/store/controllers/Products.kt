@@ -91,11 +91,9 @@ class Products {
 
     @GetMapping("/products")
     fun getProducts(@RequestParam(required = false) type: ProductType?): List<Product> {
-        return if (type != null) {
-            products.filter { it.details.type == type }
-        } else {
-            products
-        }
+        if (type != null)
+            return products.filter { it.details.type == type }
+        return products
     }
 }
 
