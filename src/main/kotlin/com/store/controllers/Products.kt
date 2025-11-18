@@ -36,7 +36,7 @@ data class ProductDetails(
     @field:NotNull(message = "Inventory is required")
     @field:Min(value = 1, message = "Inventory must be at least 1")
     @field:Max(value = 9999, message = "Inventory must be at most 9999")
-    val inventory: Int
+    val inventory: Int,
 
     @field:NotNull(message = "Cost is required")
     @field:DecimalMin(value = "0.01", message = "Cost must be at least 0.01")
