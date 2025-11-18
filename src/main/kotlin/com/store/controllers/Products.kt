@@ -91,12 +91,6 @@ class Products {
             return badRequestResponse(request.requestURI)
         }
 
-        // Manual validation for inventory bounds
-        if (productDetails.inventory < 1 || productDetails.inventory > 9999) {
-            println("DEBUG: Rejecting - inventory out of bounds: ${productDetails.inventory}")
-            return badRequestResponse(request.requestURI)
-        }
-
         println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, inventory=${productDetails.inventory}, cost=${productDetails.cost}")
 
         val id = nextId++
