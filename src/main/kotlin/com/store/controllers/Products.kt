@@ -97,6 +97,9 @@ class Products {
             return badRequestResponse(request.requestURI)
         }
 
+        println("DEBUG: Received POST /products with: name='${productDetails.name}', type=${productDetails.type}, 
+  inventory=${productDetails.inventory}, cost=${productDetails.cost}")
+
         val id = nextId++
         val product = Product(id, productDetails)
         products.add(product)
