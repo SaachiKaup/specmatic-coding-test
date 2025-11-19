@@ -69,7 +69,6 @@ data class ErrorResponseBody(
     val path: String
 )
 
-// Helper function
 fun badRequestResponse(message: String = "Bad Request"): ResponseEntity<ErrorResponseBody> {
     val error = ErrorResponseBody(
         timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
@@ -115,7 +114,6 @@ class GlobalExceptionHandler {
         ex: HttpMessageNotReadableException,
         request: HttpServletRequest
     ): ResponseEntity<ErrorResponseBody> {
-        println("DEBUG: Caught HttpMessageNotReadableException: ${ex.message}")
         return badRequestResponse("Bad Request - Invalid JSON")
     }
 
@@ -124,8 +122,6 @@ class GlobalExceptionHandler {
         ex: MethodArgumentNotValidException,
         request: HttpServletRequest
     ): ResponseEntity<ErrorResponseBody> {
-        val errors = ex.bindingResult.fieldErrors.joinToString(", ") { "${it.field}: ${it.defaultMessage}" }
-        println("DEBUG: Validation failed: $errors")
         return badRequestResponse("Bad Request - Arguments Invalid")
     }
 }
