@@ -93,6 +93,8 @@ The newer contract is backward compatible
 - 100% API Coverage is still maintained
 - Code changes are committed to your Github repo.
 
+[x] Complete
+ 
 ### 8. Trigger the CI pipeline under Github Actions. 
 - Make sure all tests are passing on the pipeline as well.
 - Email the following details to coding.test@specmatic.io:
