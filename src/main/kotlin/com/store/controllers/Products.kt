@@ -14,29 +14,23 @@ import com.store.models.Product
 import com.store.models.ProductDetails
 import com.store.models.ProductId
 import com.store.models.ProductType
+import com.store.handlers.ProductHandler
 
 // Controller
 @RestController
-class Products {
-    private val products = mutableListOf<Product>()
-    private var nextId = 1
+class Products(private val productHandler: ProductHandler) {
 
     @PostMapping("/products")
     fun createProduct(
         @Valid @RequestBody productDetails: ProductDetails,
         request: HttpServletRequest
-    ): ResponseEntity<*> {
-
-        val id = nextId++
-        products.add(Product(id, productDetails))
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProductId(id))
+    ): ResponseEntity<ProductId> {
+        val productId = productHandler.createProduct(productDetails)
+        return ResponseEntity.status(HttpStatus.CREATED).body(productId)
     }
 
     @GetMapping("/products")
     fun getProducts(@RequestParam(required = false) type: ProductType?): List<Product> {
-        if (type != null)
-            return products.filter { it.details.type == type }
-        return products
+        return productHandler.getProducts(type)
     }
 }
