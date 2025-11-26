@@ -1,4 +1,4 @@
-package com.store
+package com.store.unit
 
 import com.store.controllers.ProductController
 import com.store.handlers.ProductHandler

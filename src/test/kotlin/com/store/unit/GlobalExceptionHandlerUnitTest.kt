@@ -1,4 +1,4 @@
-package com.store
+package com.store.unit
 
 import com.store.helper.GlobalExceptionHandler
 import com.store.helper.badRequestResponse

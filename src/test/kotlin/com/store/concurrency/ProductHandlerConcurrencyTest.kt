@@ -1,4 +1,4 @@
-package com.store
+package com.store.concurrency
 
 import com.store.handlers.ProductHandler
 import com.store.models.ProductDetails
