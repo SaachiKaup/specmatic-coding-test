@@ -14,11 +14,6 @@ import java.math.BigDecimal
 
 enum class ProductType { book, food, gadget, other }
 
-const val MIN_INVENTORY = 1L
-const val MAX_INVENTORY = 9999L
-const val MIN_COST = "0.0"
-const val MAX_COST = "1000000.0"
-
 data class ProductDetails(
     @field:NotBlank(message = "Name is required and cannot be blank")
     val name: String,
@@ -36,7 +31,14 @@ data class ProductDetails(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSetter(nulls = Nulls.FAIL)
     val cost: BigDecimal? = null
-)
+) {
+    companion object {
+        const val MIN_INVENTORY = 1L
+        const val MAX_INVENTORY = 9999L
+        const val MIN_COST = "0.0"
+        const val MAX_COST = "1000000.0"
+    }
+}
 
 data class ProductId(val id: Int)
 
