@@ -9,7 +9,7 @@ import java.util.Collections
 import java.util.concurrent.atomic.AtomicInteger
 
 @Component
-class ProductHandler {
+class ProductService {
     private val products = Collections.synchronizedList(mutableListOf<Product>())
     private val nextId = AtomicInteger(1)
 

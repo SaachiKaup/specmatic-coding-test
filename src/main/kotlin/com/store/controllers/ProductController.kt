@@ -9,26 +9,26 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
-import com.store.handlers.ProductHandler
+import com.store.handlers.ProductService
 import com.store.models.Product
 import com.store.models.ProductDetails
 import com.store.models.ProductId
 import com.store.models.ProductType
 
 @RestController
-class ProductController(private val productHandler: ProductHandler) {
+class ProductController(private val productService: ProductService) {
 
     @PostMapping("/products")
     fun createProduct(
         @Valid @RequestBody productDetails: ProductDetails,
         request: HttpServletRequest
     ): ResponseEntity<ProductId> {
-        val productId = productHandler.createProduct(productDetails)
+        val productId = productService.createProduct(productDetails)
         return ResponseEntity.status(HttpStatus.CREATED).body(productId)
     }
 
     @GetMapping("/products")
     fun getProducts(@RequestParam(required = false) type: ProductType?): List<Product> {
-        return productHandler.getProducts(type)
+        return productService.getProducts(type)
     }
 }

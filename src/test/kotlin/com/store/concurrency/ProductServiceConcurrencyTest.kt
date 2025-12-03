@@ -1,17 +1,17 @@
 package com.store.concurrency
 
-import com.store.handlers.ProductHandler
+import com.store.handlers.ProductService
 import com.store.models.ProductDetails
 import com.store.models.ProductType
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import kotlin.concurrent.thread
 
-class ProductHandlerConcurrencyTest {
+class ProductServiceConcurrencyTest {
 
     @Test
     fun `test concurrent product creation`() {
-        val handler = ProductHandler()
+        val service = ProductService()
         val numberOfThreads = 100
         val productsPerThread = 10
         val threads = mutableListOf<Thread>()
@@ -25,7 +25,7 @@ class ProductHandlerConcurrencyTest {
                         type = ProductType.gadget,
                         inventory = 10
                     )
-                    handler.createProduct(productDetails)
+                    service.createProduct(productDetails)
                 }
             }
             threads.add(thread)
@@ -35,7 +35,7 @@ class ProductHandlerConcurrencyTest {
         threads.forEach { it.join() }
 
         // Verify total count
-        val allProducts = handler.getProducts(null)
+        val allProducts = service.getProducts(null)
         assertEquals(numberOfThreads * productsPerThread, allProducts.size,
             "Total products should match expected count")
 
