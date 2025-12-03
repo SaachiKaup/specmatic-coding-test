@@ -1,4 +1,4 @@
-package com.store.helper
+package com.store.handlers
 
 import com.store.models.ErrorResponseBody
 import org.springframework.web.bind.annotation.ControllerAdvice

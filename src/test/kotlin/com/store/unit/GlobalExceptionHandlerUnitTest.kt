@@ -1,7 +1,7 @@
 package com.store.unit
 
-import com.store.helper.GlobalExceptionHandler
-import com.store.helper.badRequestResponse
+import com.store.handlers.GlobalExceptionHandler
+import com.store.handlers.badRequestResponse
 import jakarta.servlet.http.HttpServletRequest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
