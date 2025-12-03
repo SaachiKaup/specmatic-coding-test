@@ -9,22 +9,19 @@ import com.fasterxml.jackson.databind.cfg.CoercionInputShape
 import com.fasterxml.jackson.databind.cfg.CoercionAction
 
 @Configuration
-open class AppConfig {
+open class StrictPrimitiveTypeCoercionConfig {
 
     @Bean
     @Primary
     open fun objectMapper(builder: Jackson2ObjectMapperBuilder): ObjectMapper {
         return builder.build<ObjectMapper>().apply {
-            // Define coercion types to fail
-            val coercionTypes = arrayOf(
+            val inputDataTypes = listOf(
                 CoercionInputShape.Integer,
                 CoercionInputShape.Float,
                 CoercionInputShape.Boolean
             )
-
-            // Disable all type coercion for the specified types
-            for (type in coercionTypes) {
-                coercionConfigDefaults().setCoercion(type, CoercionAction.Fail)
+            inputDataTypes.forEach {
+                coercionConfigDefaults().setCoercion(it, CoercionAction.Fail)
             }
         }
     }
